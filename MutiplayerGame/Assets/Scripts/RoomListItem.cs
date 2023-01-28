@@ -14,7 +14,6 @@ public class RoomListItem : MonoBehaviour
     {
         info = _info;
         text.text = info.Name;
-        //text.text = info.Name + " " + info.PlayerCount;
     }
 
     public void OnClick()

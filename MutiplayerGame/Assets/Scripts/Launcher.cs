@@ -69,8 +69,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
         for (int i = 0; i < players.Length; i++)
         {
-            Instantiate(playerListItemPrefab, playerListContent).
-                GetComponent<PlayerListItem>().Setup(players[i]);
+            Instantiate(playerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().Setup(players[i]);
         }
 
         startGameButton.SetActive(PhotonNetwork.IsMasterClient);
@@ -120,14 +119,12 @@ public class Launcher : MonoBehaviourPunCallbacks
         {
             if (roomList[i].RemovedFromList)
                 continue;
-            Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().
-                Setup(roomList[i]);
+            Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().Setup(roomList[i]);
         }
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        Instantiate(playerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().
-            Setup(newPlayer);
+        Instantiate(playerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().Setup(newPlayer);
     }
 }
