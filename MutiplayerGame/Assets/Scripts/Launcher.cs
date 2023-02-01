@@ -41,10 +41,9 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         MenuManager._instance.OpenMenu("title");
         Debug.Log("Joined Lobby");
-        PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
+        //PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
     }
 
-    // Update is called once per frame
     public void CreateRoom()
     {
         if(string.IsNullOrEmpty(roomNameInputField.text))

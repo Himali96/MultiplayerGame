@@ -1,12 +1,15 @@
+using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
-using Photon.Realtime;
-using Photon.Pun;
 using UnityEngine;
+using UnityEngine.UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 {
+    [SerializeField] Image heathbarImg;
+    [SerializeField] GameObject ui;
     [SerializeField] GameObject cameraHolder;
     [SerializeField] float mouseSensitivity, jumpForce, sprintSpeed, walkSpeed, smoothTime;
     [SerializeField] Item[] items;
@@ -46,6 +49,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         {
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb);
+            Destroy(ui);
         }
     }
     // Update is called once per frame
@@ -67,18 +71,18 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             }
         }
 
-        if(Input.GetAxisRaw("Mouse ScrollWheel") > 0)
+        if (Input.GetAxisRaw("Mouse ScrollWheel") > 0f)
         {
-            if(itemIndex >= items.Length - 1)
+            if (itemIndex >= items.Length - 1)
             {
                 EquipItem(0);
-            } 
+            }
             else
             {
                 EquipItem(itemIndex + 1);
             }
         }
-        else if(Input.GetAxisRaw("Mouse ScrollWheel") < 0)
+        else if (Input.GetAxisRaw("Mouse ScrollWheel") < 0f)
         {
             if (itemIndex <= 0)
             {
@@ -90,9 +94,14 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             }
         }
 
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             items[itemIndex].Use();
+        }
+
+        if (transform.position.y < -10) // Die if you fall out of the world
+        {
+            Die();
         }
     }
 
@@ -128,27 +137,29 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             rb.AddForce(transform.up * jumpForce);
         }
     }
+
     public void SetGroundedState (bool _grounded)
     {
         grounded = _grounded;
     }
 
-    void EquipItem (int _index)
+    void EquipItem(int _index)
     {
         if (_index == previousItemIndex)
             return;
 
         itemIndex = _index;
+
         items[itemIndex].itemGameObject.SetActive(true);
 
-        if(previousItemIndex != -1)
+        if (previousItemIndex != -1)
         {
             items[previousItemIndex].itemGameObject.SetActive(false);
         }
 
         previousItemIndex = itemIndex;
 
-        if(PV.IsMine)
+        if (PV.IsMine)
         {
             Hashtable hash = new Hashtable();
             hash.Add("itemIndex", itemIndex);
@@ -158,25 +169,22 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
-        if (!PV.IsMine && targetPlayer == PV.Owner)
+        if (changedProps.ContainsKey("itemIndex") && !PV.IsMine && targetPlayer == PV.Owner)
         {
-            EquipItem((int)changedProps["itemindex"]);
+            EquipItem((int)changedProps["itemIndex"]);
         }
     }
 
     public void TakeDamage (float damage)
     {
-        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage);
+        PV.RPC(nameof(RPC_TakeDamage), PV.Owner, damage);
     }
 
     [PunRPC]
     void RPC_TakeDamage(float damage)
     {
-        if (!PV.IsMine)
-            return;
-
         currentHealth -= damage;
-
+        heathbarImg.fillAmount = currentHealth / maxHealth;
         if(currentHealth <= 0)
         {
             Die();
