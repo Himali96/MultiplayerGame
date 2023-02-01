@@ -537,7 +537,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heathbarImg: {fileID: 3449523638121918403}
-  ui: {fileID: 0}
+  ui: {fileID: 3522792945522122487}
   cameraHolder: {fileID: 6583039675631204362}
   mouseSensitivity: 3
   jumpForce: 30
