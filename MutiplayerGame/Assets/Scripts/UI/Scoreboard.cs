@@ -56,14 +56,11 @@ public class Scoreboard : MonoBehaviourPunCallbacks
 
     public void LoadMainMenu()
     {
-        if (PhotonNetwork.InRoom)
-        {
-            PhotonNetwork.LeaveRoom();
-        }
-        else
-        {
-            SceneManager.LoadScene(0);
-        }
+        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.AutomaticallySyncScene = false;
+        PhotonNetwork.LoadLevel(0);
+        Destroy(GameObject.Find("RoomManager"));
+
     }
 
     void Update()

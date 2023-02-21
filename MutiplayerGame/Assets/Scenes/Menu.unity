@@ -5219,7 +5219,7 @@ GameObject:
   - component: {fileID: 2139907511}
   - component: {fileID: 2139907513}
   m_Layer: 0
-  m_Name: Room Manager
+  m_Name: RoomManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

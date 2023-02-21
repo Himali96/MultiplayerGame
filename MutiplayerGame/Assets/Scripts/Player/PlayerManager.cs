@@ -91,14 +91,10 @@ public class PlayerManager : MonoBehaviour
     IEnumerator LoadLevelAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        if (PhotonNetwork.InRoom)
-        {
-            PhotonNetwork.LeaveRoom();
-        }
-        else
-        {
-            SceneManager.LoadScene(0);
-        }
+        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.AutomaticallySyncScene = false;
+        PhotonNetwork.LoadLevel(0);
+        Destroy(GameObject.Find("RoomManager"));
     }
 
     public static PlayerManager Find(Player player)
