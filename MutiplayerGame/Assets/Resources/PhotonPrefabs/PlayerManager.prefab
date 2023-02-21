@@ -67,3 +67,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03579e2582b9b2946b9144fe9ad3e11a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isGameOver: 0
